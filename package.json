@@ -1,5 +1,5 @@
 {
-  "name": "receitas-portfolio",
+  "name": "portifolio-web-receitas-culinarias",
   "version": "1.0.0",
   "description": "Portfólio Web de Receitas Culinárias - UTFPR - Programação Web Back-End",
   "main": "app.js",
@@ -8,7 +8,7 @@
     "dev": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vinicius Antonio, André Born",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
