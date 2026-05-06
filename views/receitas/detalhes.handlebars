@@ -1,0 +1,73 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h3 class="mb-0"><i class="bi bi-journal-richtext"></i> {{receita.nome}}</h3>
+        <a href="/" class="btn btn-outline-light btn-sm">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+      </div>
+      <div class="card-body">
+        <!-- Descrição -->
+        <div class="mb-4">
+          <h5><i class="bi bi-card-text"></i> Descrição</h5>
+          {{#if receita.descricao}}
+            <p class="lead">{{receita.descricao}}</p>
+          {{else}}
+            <p class="text-muted"><em>Sem descrição cadastrada.</em></p>
+          {{/if}}
+        </div>
+
+        <!-- Link Externo -->
+        {{#if receita.link_externo}}
+          <div class="mb-4">
+            <h5><i class="bi bi-link-45deg"></i> Link Externo</h5>
+            <a href="{{receita.link_externo}}" target="_blank" class="btn btn-outline-warning">
+              <i class="bi bi-box-arrow-up-right"></i> Acessar Receita Completa
+            </a>
+          </div>
+        {{/if}}
+
+        <!-- Categorias -->
+        <div class="mb-4">
+          <h5><i class="bi bi-tags"></i> Categorias</h5>
+          {{#if receita.categorias.length}}
+            {{#each receita.categorias}}
+              <span class="badge bg-secondary fs-6 me-1">{{this.nome}}</span>
+            {{/each}}
+          {{else}}
+            <p class="text-muted"><em>Nenhuma categoria vinculada.</em></p>
+          {{/if}}
+        </div>
+
+        <!-- Responsáveis -->
+        <div class="mb-4">
+          <h5><i class="bi bi-people"></i> Responsáveis</h5>
+          {{#if receita.responsaveis.length}}
+            <ul class="list-group list-group-flush">
+              {{#each receita.responsaveis}}
+                <li class="list-group-item">
+                  <i class="bi bi-person-circle text-info"></i> {{this.login}}
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="text-muted"><em>Nenhum responsável vinculado.</em></p>
+          {{/if}}
+        </div>
+      </div>
+
+      {{#if logado}}
+        <div class="card-footer">
+          <a href="/receitas/editar/{{receita.id}}" class="btn btn-primary btn-sm">
+            <i class="bi bi-pencil"></i> Editar
+          </a>
+          <a href="/receitas/excluir/{{receita.id}}" class="btn btn-danger btn-sm"
+             onclick="return confirm('Tem certeza que deseja excluir esta receita?')">
+            <i class="bi bi-trash"></i> Excluir
+          </a>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

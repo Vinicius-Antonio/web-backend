@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-tags text-warning"></i> Gerenciar Categorias</h1>
+  <a href="/categorias/cadastrar" class="btn btn-warning">
+    <i class="bi bi-plus-circle"></i> Nova Categoria
+  </a>
+</div>
+
+{{#if erro}}
+  <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> {{erro}}</div>
+{{/if}}
+
+{{#if categorias.length}}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Nome</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each categorias}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td><strong>{{this.nome}}</strong></td>
+            <td>
+              <a href="/categorias/editar/{{this.id}}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <a href="/categorias/excluir/{{this.id}}" class="btn btn-outline-danger btn-sm"
+                 onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+{{else}}
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> Nenhuma categoria cadastrada.
+  </div>
+{{/if}}
