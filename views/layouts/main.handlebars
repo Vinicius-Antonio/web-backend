@@ -5,52 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Portfólio Web de Receitas Culinárias - UTFPR">
   <title>Receitas Culinárias - UTFPR</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <style>
+    :root {
+      --cafe-escuro:  #6E3A2C;
+      --cafe-medio:   #954534;
+      --cafe-quente:  #996851;
+      --cafe-claro:   #8e8079;
+      --cafe-bege:    #A69A97;
+      --cafe-fundo:   #f5ede8;
+      --cafe-card:    #fdf8f5;
+    }
+
     body {
-      background-color: #f8f9fa;
+      background-color: var(--cafe-fundo);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      font-family: Georgia, 'Times New Roman', serif;
     }
-    .navbar-brand i {
-      color: #fd7e14;
-    }
-    main {
-      flex: 1;
-    }
-    footer {
-      background-color: #343a40;
-      color: #adb5bd;
-      padding: 1rem 0;
-      margin-top: auto;
-    }
-    .card {
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+
+    .navbar { background-color: var(--cafe-escuro) !important; border-bottom: 3px solid var(--cafe-medio); }
+    .navbar-brand { font-size: 1.3rem; letter-spacing: 0.5px; }
+    .navbar-brand i { color: var(--cafe-quente); }
+    .nav-link { color: #e8ddd8 !important; transition: color 0.2s; }
+    .nav-link:hover { color: var(--cafe-bege) !important; }
+    .navbar-toggler { border-color: var(--cafe-quente); }
+    .dropdown-menu { background-color: var(--cafe-escuro); border: 1px solid var(--cafe-medio); }
+    .dropdown-item { color: #e8ddd8; }
+    .dropdown-item:hover { background-color: var(--cafe-medio); color: #fff; }
+
+    main { flex: 1; }
+
+    .card { background-color: var(--cafe-card); border: 1px solid #ddd0c8; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(110,58,44,0.15); }
+    .card-header.bg-dark { background-color: var(--cafe-escuro) !important; }
+
+    .btn-dark { background-color: var(--cafe-escuro); border-color: var(--cafe-escuro); }
+    .btn-dark:hover { background-color: var(--cafe-medio); border-color: var(--cafe-medio); }
+    .btn-warning { background-color: var(--cafe-quente); border-color: var(--cafe-quente); color: #fff; }
+    .btn-warning:hover { background-color: var(--cafe-medio); border-color: var(--cafe-medio); color: #fff; }
+    .btn-outline-dark { color: var(--cafe-escuro); border-color: var(--cafe-escuro); }
+    .btn-outline-dark:hover { background-color: var(--cafe-escuro); color: #fff; }
+    .btn-outline-warning { color: var(--cafe-quente); border-color: var(--cafe-quente); }
+    .btn-outline-warning:hover { background-color: var(--cafe-quente); color: #fff; }
+    .btn-secondary { background-color: var(--cafe-claro); border-color: var(--cafe-claro); }
+    .btn-secondary:hover { background-color: var(--cafe-bege); border-color: var(--cafe-bege); }
+
+    .badge.bg-warning { background-color: var(--cafe-quente) !important; color: #fff !important; }
+    .badge.bg-secondary { background-color: var(--cafe-claro) !important; }
+    .badge.bg-info { background-color: var(--cafe-bege) !important; color: #3a2318 !important; }
+    .badge.bg-dark { background-color: var(--cafe-escuro) !important; }
+
+    thead.table-dark th { background-color: var(--cafe-escuro); color: #f5ede8; border-color: var(--cafe-medio); }
+    .table-striped > tbody > tr:nth-of-type(odd) { background-color: #f0e6e0; }
+    .table-hover > tbody > tr:hover { background-color: #e8d8cf; }
+
+    .progress-bar.bg-warning { background-color: var(--cafe-quente) !important; }
+
+    .alert-info { background-color: #ede0d8; border-color: var(--cafe-bege); color: var(--cafe-escuro); }
+
+    h1, h2, h3 { color: var(--cafe-escuro); }
+    .text-warning { color: var(--cafe-quente) !important; }
+
+    footer { background-color: var(--cafe-escuro); color: var(--cafe-bege); padding: 1rem 0; margin-top: auto; border-top: 3px solid var(--cafe-medio); }
+
+    .form-control:focus, .form-select:focus { border-color: var(--cafe-quente); box-shadow: 0 0 0 0.2rem rgba(153,104,81,0.25); }
+    .input-group-text { background-color: var(--cafe-bege); border-color: #ccc0b8; color: var(--cafe-escuro); }
+    .form-range::-webkit-slider-thumb { background: var(--cafe-quente); }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand" href="/">
-        <i class="bi bi-egg-fried"></i> Receitas UTFPR
+      <a class="navbar-brand text-white" href="/">
+        <i class="bi bi-cup-hot-fill"></i> Receitas UTFPR
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
-          <!-- Links públicos -->
           <li class="nav-item">
             <a class="nav-link" href="/"><i class="bi bi-house"></i> Início</a>
           </li>
@@ -59,7 +96,6 @@
           </li>
 
           {{#if logado}}
-            <!-- Links do aluno logado -->
             <li class="nav-item">
               <a class="nav-link" href="/receitas/minhas"><i class="bi bi-journal-text"></i> Minhas Receitas</a>
             </li>
@@ -72,7 +108,6 @@
           {{/if}}
 
           {{#if admin}}
-            <!-- Links do admin -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                 <i class="bi bi-gear"></i> Administração
@@ -91,7 +126,7 @@
             <li class="nav-item">
               <span class="nav-link text-light">
                 <i class="bi bi-person-circle"></i> {{loginUsuario}}
-                {{#if admin}}<span class="badge bg-warning text-dark ms-1">Admin</span>{{/if}}
+                {{#if admin}}<span class="badge bg-warning ms-1">Admin</span>{{/if}}
               </span>
             </li>
             <li class="nav-item">
@@ -107,19 +142,16 @@
     </div>
   </nav>
 
-  <!-- Conteúdo principal -->
   <main class="container py-4">
     {{{body}}}
   </main>
 
-  <!-- Footer -->
   <footer class="text-center">
     <div class="container">
       <p class="mb-0">&copy; 2026 - Portfólio de Receitas Culinárias | UTFPR - Programação Web Back-End</p>
     </div>
   </footer>
 
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
