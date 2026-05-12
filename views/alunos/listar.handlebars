@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-people text-warning"></i> Gerenciar Alunos</h1>
+  <a href="/alunos/cadastrar" class="btn btn-warning">
+    <i class="bi bi-plus-circle"></i> Novo Aluno
+  </a>
+</div>
+
+{{#if erro}}
+  <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> {{erro}}</div>
+{{/if}}
+
+{{#if alunos.length}}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Login</th>
+          <th>Tipo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each alunos}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td><strong>{{this.login}}</strong></td>
+            <td>
+              {{#if (eq this.tipo 2)}}
+                <span class="badge bg-warning text-dark">Admin</span>
+              {{else}}
+                <span class="badge bg-info text-dark">Aluno</span>
+              {{/if}}
+            </td>
+            <td>
+              <a href="/alunos/editar/{{this.id}}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <a href="/alunos/excluir/{{this.id}}" class="btn btn-outline-danger btn-sm"
+                 onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+{{else}}
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> Nenhum aluno cadastrado.
+  </div>
+{{/if}}
