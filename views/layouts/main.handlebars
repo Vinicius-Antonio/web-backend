@@ -3,166 +3,365 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Portfólio Web de Receitas Culinárias - UTFPR">
   <title>Receitas Culinárias - UTFPR</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <style>
+    /* ── Tokens ── */
     :root {
       --cafe-escuro:  #6E3A2C;
       --cafe-medio:   #954534;
       --cafe-quente:  #996851;
       --cafe-claro:   #8e8079;
       --cafe-bege:    #A69A97;
-      --cafe-fundo:   #f5ede8;
-      --cafe-card:    #fdf8f5;
+    }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
     }
 
     body {
-      background-color: var(--cafe-fundo);
-      min-height: 100vh;
+      background-color: #f5ede8;
+      color: #2a1a14;
+      font-family: Georgia, 'Times New Roman', serif;
       display: flex;
       flex-direction: column;
-      font-family: Georgia, 'Times New Roman', serif;
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Navbar */
-    .navbar { background-color: var(--cafe-escuro) !important; border-bottom: 3px solid var(--cafe-medio); }
-    .navbar-brand { font-size: 1.3rem; letter-spacing: 0.5px; }
-    .navbar-brand i { color: var(--cafe-quente); }
-    .nav-link { color: #e8ddd8 !important; transition: color 0.2s; }
-    .nav-link:hover { color: var(--cafe-bege) !important; }
-    .navbar-toggler { border-color: var(--cafe-quente); }
-    .dropdown-menu { background-color: var(--cafe-escuro); border: 1px solid var(--cafe-medio); }
-    .dropdown-item { color: #e8ddd8; }
-    .dropdown-item:hover { background-color: var(--cafe-medio); color: #fff; }
+    /* ── Top navbar ── */
+    .topbar {
+      background-color: #6E3A2C;
+      border-bottom: 3px solid #954534;
+      padding: 0.6rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+    }
+    .topbar-brand {
+      color: #f5ede8;
+      font-size: 1.2rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .topbar-brand i { color: #996851; }
+    .topbar-brand:hover { color: #A69A97; }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .topbar-user {
+      color: #e8ddd8;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .topbar-user .badge {
+      background-color: #996851 !important;
+      color: #fff !important;
+    }
+    .topbar-login {
+      color: #e8ddd8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.2s;
+    }
+    .topbar-login:hover { color: #A69A97; }
+    .topbar-logout {
+      color: #f08080;
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.2s;
+    }
+    .topbar-logout:hover { color: #ff6b6b; }
 
-    /* Main */
-    main { flex: 1; }
+    /* Botão hamburguer mobile */
+    .sidebar-toggle {
+      background: none;
+      border: none;
+      color: #f5ede8;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0;
+      display: none;
+    }
 
-    /* Cards */
-    .card { background-color: var(--cafe-card); border: 1px solid #ddd0c8; transition: transform 0.2s; }
+    /* ── Layout principal ── */
+    .app-body {
+      display: flex;
+      flex: 1;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 230px;
+      min-width: 230px;
+      background-color: #3b2535;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 0 0;
+      position: sticky;
+      top: 51px;
+      height: calc(100vh - 51px);
+      overflow-y: auto;
+      transition: background-color 0.3s, transform 0.3s;
+      z-index: 100;
+    }
+
+    .sidebar-section {
+      padding: 0.3rem 1rem 0.2rem;
+      font-size: 0.68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #A69A97;
+      margin-top: 0.8rem;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 1.2rem;
+      color: #e8ddd8;
+      text-decoration: none;
+      font-size: 0.92rem;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .sidebar-link i { font-size: 1rem; color: #A69A97; flex-shrink: 0; }
+    .sidebar-link:hover {
+      background-color: #4e3048;
+      border-left-color: #996851;
+      color: #fff;
+    }
+    .sidebar-link:hover i { color: #996851; }
+    .sidebar-link.active {
+      background-color: #4e3048;
+      border-left-color: #954534;
+      color: #fff;
+    }
+    .sidebar-link.active i { color: #996851; }
+
+    .sidebar-divider {
+      border-color: rgba(255,255,255,0.07);
+      margin: 0.6rem 1rem;
+    }
+
+    /* ── Conteúdo ── */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 51px);
+    }
+    .main-content main { flex: 1; }
+
+    /* ── Footer ── */
+    footer {
+      background-color: #6E3A2C;
+      color: #A69A97;
+      padding: 0.8rem 0;
+      text-align: center;
+      font-size: 0.85rem;
+      border-top: 3px solid #954534;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background-color: #fdf8f5;
+      border: 1px solid #ddd0c8;
+      transition: transform 0.2s, background-color 0.3s;
+    }
     .card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(110,58,44,0.15); }
-    .card-header.bg-dark { background-color: var(--cafe-escuro) !important; }
+    .card-header.bg-dark { background-color: #6E3A2C !important; }
 
-    /* Buttons */
-    .btn-dark { background-color: var(--cafe-escuro); border-color: var(--cafe-escuro); }
-    .btn-dark:hover { background-color: var(--cafe-medio); border-color: var(--cafe-medio); }
-    .btn-warning { background-color: var(--cafe-quente); border-color: var(--cafe-quente); color: #fff; }
-    .btn-warning:hover { background-color: var(--cafe-medio); border-color: var(--cafe-medio); color: #fff; }
-    .btn-outline-dark { color: var(--cafe-escuro); border-color: var(--cafe-escuro); }
-    .btn-outline-dark:hover { background-color: var(--cafe-escuro); color: #fff; }
-    .btn-outline-warning { color: var(--cafe-quente); border-color: var(--cafe-quente); }
-    .btn-outline-warning:hover { background-color: var(--cafe-quente); color: #fff; }
-    .btn-secondary { background-color: var(--cafe-claro); border-color: var(--cafe-claro); }
-    .btn-secondary:hover { background-color: var(--cafe-bege); border-color: var(--cafe-bege); }
+    /* ── Buttons ── */
+    .btn-dark { background-color: #6E3A2C; border-color: #6E3A2C; color: #fff; }
+    .btn-dark:hover { background-color: #954534; border-color: #954534; }
+    .btn-warning { background-color: #996851; border-color: #996851; color: #fff; }
+    .btn-warning:hover { background-color: #954534; border-color: #954534; color: #fff; }
+    .btn-outline-dark { color: #6E3A2C; border-color: #6E3A2C; }
+    .btn-outline-dark:hover { background-color: #6E3A2C; color: #fff; }
+    .btn-outline-warning { color: #996851; border-color: #996851; }
+    .btn-outline-warning:hover { background-color: #996851; color: #fff; }
+    .btn-secondary { background-color: #8e8079; border-color: #8e8079; color: #fff; }
+    .btn-secondary:hover { background-color: #A69A97; border-color: #A69A97; }
 
-    /* Badges */
-    .badge.bg-warning { background-color: var(--cafe-quente) !important; color: #fff !important; }
-    .badge.bg-secondary { background-color: var(--cafe-claro) !important; }
-    .badge.bg-info { background-color: var(--cafe-bege) !important; color: #3a2318 !important; }
-    .badge.bg-dark { background-color: var(--cafe-escuro) !important; }
 
-    /* Tables */
-    thead.table-dark th { background-color: var(--cafe-escuro); color: #f5ede8; border-color: var(--cafe-medio); }
-    .table-striped > tbody > tr:nth-of-type(odd) { background-color: #f0e6e0; }
-    .table-hover > tbody > tr:hover { background-color: #e8d8cf; }
+    /* ── Badges ── */
+    .badge.bg-warning { background-color: #996851 !important; color: #fff !important; }
+    .badge.bg-secondary { background-color: #8e8079 !important; }
+    .badge.bg-info { background-color: #A69A97 !important; color: #3a2318 !important; }
+    .badge.bg-dark { background-color: #6E3A2C !important; }
 
-    /* Progress */
-    .progress-bar.bg-warning { background-color: var(--cafe-quente) !important; }
+    /* ── Tables ── */
+    thead.table-dark th { background-color: #6E3A2C; color: #f5ede8; border-color: #954534; }
+    .table-striped > tbody > tr:nth-of-type(odd) > * { background-color: #f0e6e0; color: #2a1a14; }
+    .table-hover > tbody > tr:hover > * { background-color: #e8d8cf; color: #2a1a14; }
 
-    /* Alerts */
-    .alert-info { background-color: #ede0d8; border-color: var(--cafe-bege); color: var(--cafe-escuro); }
 
-    /* Headings */
-    h1, h2, h3 { color: var(--cafe-escuro); }
-    .text-warning { color: var(--cafe-quente) !important; }
+    /* ── Progress ── */
+    .progress { background-color: #ddd0c8; }
+    .progress-bar.bg-warning { background-color: #996851 !important; }
 
-    /* Footer */
-    footer { background-color: var(--cafe-escuro); color: var(--cafe-bege); padding: 1rem 0; margin-top: auto; border-top: 3px solid var(--cafe-medio); }
+    /* ── Alerts ── */
+    .alert-info { background-color: #ede0d8; border-color: #A69A97; color: #6E3A2C; }
 
-    /* Forms */
-    .form-control:focus, .form-select:focus { border-color: var(--cafe-quente); box-shadow: 0 0 0 0.2rem rgba(153,104,81,0.25); }
-    .input-group-text { background-color: var(--cafe-bege); border-color: #ccc0b8; color: var(--cafe-escuro); }
-    .form-range::-webkit-slider-thumb { background: var(--cafe-quente); }
+    /* ── Headings ── */
+    h1, h2, h3 { color: #6E3A2C; }
+    .text-warning { color: #996851 !important; }
+    .text-muted { color: #7a6a64 !important; }
+
+    /* ── Forms ── */
+    .form-control, .form-select {
+      background-color: #fdf8f5;
+      color: #2a1a14;
+      border-color: #ddd0c8;
+    }
+    .form-control:focus, .form-select:focus {
+      background-color: #fdf8f5;
+      color: #2a1a14;
+      border-color: #996851;
+      box-shadow: 0 0 0 0.2rem rgba(153,104,81,0.25);
+    }
+    .input-group-text { background-color: #3b2535; border-color: #ddd0c8; color: #e8ddd8; }
+    .form-range::-webkit-slider-thumb { background: #996851; }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      .sidebar-toggle { display: block; }
+      .sidebar {
+        position: fixed;
+        top: 51px;
+        left: 0;
+        transform: translateX(-100%);
+        height: calc(100vh - 51px);
+        z-index: 1020;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 1019;
+      }
+      .sidebar-backdrop.open { display: block; }
+      .main-content { padding: 1rem; }
+    }
   </style>
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand text-white" href="/">
+  <!-- ── Top bar ── -->
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu">
+        <i class="bi bi-list"></i>
+      </button>
+      <a class="topbar-brand" href="/">
         <i class="bi bi-cup-hot-fill"></i> Receitas UTFPR
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/"><i class="bi bi-house"></i> Início</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/relatorio"><i class="bi bi-bar-chart"></i> Relatório</a>
-          </li>
-
-          {{#if logado}}
-            <li class="nav-item">
-              <a class="nav-link" href="/receitas/minhas"><i class="bi bi-journal-text"></i> Minhas Receitas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/receitas/cadastrar"><i class="bi bi-plus-circle"></i> Nova Receita</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/habilidades/minhas"><i class="bi bi-star"></i> Minhas Habilidades</a>
-            </li>
-          {{/if}}
-
-          {{#if admin}}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                <i class="bi bi-gear"></i> Administração
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/alunos"><i class="bi bi-people"></i> Alunos</a></li>
-                <li><a class="dropdown-item" href="/categorias"><i class="bi bi-tags"></i> Categorias</a></li>
-                <li><a class="dropdown-item" href="/habilidades"><i class="bi bi-lightning"></i> Habilidades</a></li>
-              </ul>
-            </li>
-          {{/if}}
-        </ul>
-
-        <ul class="navbar-nav">
-          {{#if logado}}
-            <li class="nav-item">
-              <span class="nav-link text-light">
-                <i class="bi bi-person-circle"></i> {{loginUsuario}}
-                {{#if admin}}<span class="badge bg-warning ms-1">Admin</span>{{/if}}
-              </span>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-danger" href="/logout"><i class="bi bi-box-arrow-right"></i> Sair</a>
-            </li>
-          {{else}}
-            <li class="nav-item">
-              <a class="nav-link" href="/login"><i class="bi bi-box-arrow-in-right"></i> Entrar</a>
-            </li>
-          {{/if}}
-        </ul>
-      </div>
     </div>
-  </nav>
-
-  <main class="container py-4">
-    {{{body}}}
-  </main>
-
-  <footer class="text-center">
-    <div class="container">
-      <p class="mb-0">&copy; 2026 - Portfólio de Receitas Culinárias | UTFPR - Programação Web Back-End</p>
+    <div class="topbar-right">
+      {{#if logado}}
+        <span class="topbar-user">
+          <i class="bi bi-person-circle"></i> {{loginUsuario}}
+          {{#if admin}}<span class="badge">Admin</span>{{/if}}
+        </span>
+        <a class="topbar-logout" href="/logout">
+          <i class="bi bi-box-arrow-right"></i> Sair
+        </a>
+      {{else}}
+        <a class="topbar-login" href="/login">
+          <i class="bi bi-box-arrow-in-right"></i> Entrar
+        </a>
+      {{/if}}
     </div>
-  </footer>
+  </header>
+
+  <!-- Backdrop mobile -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="app-body">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+
+      <span class="sidebar-section">Navegação</span>
+      <a class="sidebar-link" href="/"><i class="bi bi-house"></i> Início</a>
+      <a class="sidebar-link" href="/relatorio"><i class="bi bi-bar-chart"></i> Relatório</a>
+
+      {{#if logado}}
+        <hr class="sidebar-divider">
+        <span class="sidebar-section">Minhas Páginas</span>
+        <a class="sidebar-link" href="/receitas/minhas"><i class="bi bi-journal-text"></i> Minhas Receitas</a>
+        <a class="sidebar-link" href="/receitas/cadastrar"><i class="bi bi-plus-circle"></i> Nova Receita</a>
+        <a class="sidebar-link" href="/habilidades/minhas"><i class="bi bi-star"></i> Minhas Habilidades</a>
+      {{/if}}
+
+      {{#if admin}}
+        <hr class="sidebar-divider">
+        <span class="sidebar-section">Administração</span>
+        <a class="sidebar-link" href="/alunos"><i class="bi bi-people"></i> Alunos</a>
+        <a class="sidebar-link" href="/categorias"><i class="bi bi-tags"></i> Categorias</a>
+        <a class="sidebar-link" href="/habilidades"><i class="bi bi-lightning"></i> Habilidades</a>
+      {{/if}}
+</aside>
+
+    <!-- ── Conteúdo ── -->
+    <div class="main-content">
+      <main>
+        {{{body}}}
+      </main>
+      <footer class="mt-4">
+        <p class="mb-0">&copy; 2026 - Portfólio de Receitas Culinárias | UTFPR - Programação Web Back-End</p>
+      </footer>
+    </div>
+
+  </div><!-- /app-body -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>    // ── Sidebar mobile ──
+    const sidebar         = document.getElementById('sidebar');
+    const sidebarToggle   = document.getElementById('sidebarToggle');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      sidebarBackdrop.classList.toggle('open');
+    });
+    sidebarBackdrop.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarBackdrop.classList.remove('open');
+    });
+
+    // ── Marca link ativo ──
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      if (link.getAttribute('href') === window.location.pathname) {
+        link.classList.add('active');
+      }
+    });
+  </script>
 </body>
 </html>
