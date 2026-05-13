@@ -8,6 +8,15 @@
         </a>
       </div>
       <div class="card-body">
+
+        <!-- Imagem da receita -->
+        {{#if receita.imagem}}
+          <div class="mb-4 text-center">
+            <img src="/uploads/{{receita.imagem}}" alt="{{receita.nome}}"
+                 class="img-fluid rounded shadow-sm" style="max-height: 350px; border: 2px solid #ddd0c8;">
+          </div>
+        {{/if}}
+
         <!-- Descrição -->
         <div class="mb-4">
           <h5><i class="bi bi-card-text"></i> Descrição</h5>

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 require("../config/db_mongoose");
+const upload = require("../config/multer");
 
 const {
   configurarLocals,
@@ -33,6 +34,7 @@ router.get(
 router.post(
   "/receitas/cadastrar",
   verificarAutenticacao,
+  upload.single("imagem"),
   controllerReceita.cadastrar
 );
 router.get(
@@ -43,6 +45,7 @@ router.get(
 router.post(
   "/receitas/editar/:id",
   verificarAutenticacao,
+  upload.single("imagem"),
   controllerReceita.editar
 );
 router.get(

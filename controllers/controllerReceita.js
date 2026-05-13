@@ -1,4 +1,6 @@
 const { Receita, Categoria, Aluno } = require("../config/db_sequelize");
+const fs = require("fs");
+const path = require("path");
 
 const controllerReceita = {
   listarPublico: async (req, res) => {
@@ -98,7 +100,11 @@ const controllerReceita = {
   cadastrar: async (req, res) => {
     try {
       const { nome, descricao, link_externo, categorias, responsaveis } = req.body;
-      const receita = await Receita.create({ nome, descricao, link_externo });
+
+      // Pega o nome do arquivo se foi enviada uma imagem
+      const imagem = req.file ? req.file.filename : null;
+
+      const receita = await Receita.create({ nome, descricao, link_externo, imagem });
 
       if (categorias) {
         const catIds = Array.isArray(categorias) ? categorias : [categorias];
@@ -158,8 +164,28 @@ const controllerReceita = {
       const ehResponsavel = receita.responsaveis.some((r) => r.id === req.session.usuarioId);
       if (!ehResponsavel && req.session.tipo !== 2) return res.redirect("/receitas/minhas");
 
-      const { nome, descricao, link_externo, categorias, responsaveis } = req.body;
-      await receita.update({ nome, descricao, link_externo });
+      const { nome, descricao, link_externo, categorias, responsaveis, remover_imagem } = req.body;
+      const dadosUpdate = { nome, descricao, link_externo };
+
+      // Se enviou nova imagem, apaga a antiga e salva a nova
+      if (req.file) {
+        if (receita.imagem) {
+          const caminhoAntigo = path.join(__dirname, "..", "public", "uploads", receita.imagem);
+          if (fs.existsSync(caminhoAntigo)) fs.unlinkSync(caminhoAntigo);
+        }
+        dadosUpdate.imagem = req.file.filename;
+      }
+
+      // Se marcou para remover imagem
+      if (remover_imagem === "1" && !req.file) {
+        if (receita.imagem) {
+          const caminhoAntigo = path.join(__dirname, "..", "public", "uploads", receita.imagem);
+          if (fs.existsSync(caminhoAntigo)) fs.unlinkSync(caminhoAntigo);
+        }
+        dadosUpdate.imagem = null;
+      }
+
+      await receita.update(dadosUpdate);
 
       if (categorias) {
         const catIds = Array.isArray(categorias) ? categorias : [categorias];
@@ -188,6 +214,12 @@ const controllerReceita = {
 
       const ehResponsavel = receita.responsaveis.some((r) => r.id === req.session.usuarioId);
       if (!ehResponsavel && req.session.tipo !== 2) return res.redirect("/receitas/minhas");
+
+      // Remove a imagem do disco ao excluir a receita
+      if (receita.imagem) {
+        const caminhoImagem = path.join(__dirname, "..", "public", "uploads", receita.imagem);
+        if (fs.existsSync(caminhoImagem)) fs.unlinkSync(caminhoImagem);
+      }
 
       await receita.setCategorias([]);
       await receita.setResponsaveis([]);

@@ -14,6 +14,11 @@
       --cafe-quente:  #996851;
       --cafe-claro:   #8e8079;
       --cafe-bege:    #A69A97;
+      --cafe-creme:   #f5ede8;
+      --cafe-card:    #fdf8f5;
+      --cafe-borda:   #ddd0c8;
+      --cafe-texto:   #2a1a14;
+      --cafe-sidebar: #3b2535;
     }
 
     /* ── Base ── */
@@ -25,8 +30,8 @@
     }
 
     body {
-      background-color: #f5ede8;
-      color: #2a1a14;
+      background-color: var(--cafe-creme);
+      color: var(--cafe-texto);
       font-family: Georgia, 'Times New Roman', serif;
       display: flex;
       flex-direction: column;
@@ -36,8 +41,8 @@
 
     /* ── Top navbar ── */
     .topbar {
-      background-color: #6E3A2C;
-      border-bottom: 3px solid #954534;
+      background-color: var(--cafe-escuro);
+      border-bottom: 3px solid var(--cafe-medio);
       padding: 0.6rem 1.2rem;
       display: flex;
       align-items: center;
@@ -47,15 +52,15 @@
       z-index: 1030;
     }
     .topbar-brand {
-      color: #f5ede8;
+      color: var(--cafe-creme);
       font-size: 1.2rem;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .topbar-brand i { color: #996851; }
-    .topbar-brand:hover { color: #A69A97; }
+    .topbar-brand i { color: var(--cafe-quente); }
+    .topbar-brand:hover { color: var(--cafe-bege); }
     .topbar-right {
       display: flex;
       align-items: center;
@@ -69,7 +74,7 @@
       gap: 0.4rem;
     }
     .topbar-user .badge {
-      background-color: #996851 !important;
+      background-color: var(--cafe-quente) !important;
       color: #fff !important;
     }
     .topbar-login {
@@ -81,7 +86,7 @@
       gap: 0.3rem;
       transition: color 0.2s;
     }
-    .topbar-login:hover { color: #A69A97; }
+    .topbar-login:hover { color: var(--cafe-bege); }
     .topbar-logout {
       color: #f08080;
       text-decoration: none;
@@ -97,7 +102,7 @@
     .sidebar-toggle {
       background: none;
       border: none;
-      color: #f5ede8;
+      color: var(--cafe-creme);
       font-size: 1.4rem;
       cursor: pointer;
       padding: 0;
@@ -114,7 +119,7 @@
     .sidebar {
       width: 230px;
       min-width: 230px;
-      background-color: #3b2535;
+      background-color: var(--cafe-sidebar);
       display: flex;
       flex-direction: column;
       padding: 1.5rem 0 0;
@@ -131,7 +136,7 @@
       font-size: 0.68rem;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: #A69A97;
+      color: var(--cafe-bege);
       margin-top: 0.8rem;
     }
 
@@ -146,19 +151,19 @@
       border-left: 3px solid transparent;
       transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
-    .sidebar-link i { font-size: 1rem; color: #A69A97; flex-shrink: 0; }
+    .sidebar-link i { font-size: 1rem; color: var(--cafe-bege); flex-shrink: 0; }
     .sidebar-link:hover {
       background-color: #4e3048;
-      border-left-color: #996851;
+      border-left-color: var(--cafe-quente);
       color: #fff;
     }
-    .sidebar-link:hover i { color: #996851; }
+    .sidebar-link:hover i { color: var(--cafe-quente); }
     .sidebar-link.active {
       background-color: #4e3048;
-      border-left-color: #954534;
+      border-left-color: var(--cafe-medio);
       color: #fff;
     }
-    .sidebar-link.active i { color: #996851; }
+    .sidebar-link.active i { color: var(--cafe-quente); }
 
     .sidebar-divider {
       border-color: rgba(255,255,255,0.07);
@@ -172,80 +177,113 @@
       padding: 2rem;
       display: flex;
       flex-direction: column;
-      min-height: calc(100vh - 51px);
     }
     .main-content main { flex: 1; }
 
-    /* ── Footer ── */
-    footer {
-      background-color: #6E3A2C;
-      color: #A69A97;
+    /* ── Footer (full-width, fora do app-body) ── */
+    .site-footer {
+      background-color: var(--cafe-escuro);
+      color: var(--cafe-bege);
       padding: 0.8rem 0;
       text-align: center;
       font-size: 0.85rem;
-      border-top: 3px solid #954534;
+      border-top: 3px solid var(--cafe-medio);
     }
 
     /* ── Cards ── */
     .card {
-      background-color: #fdf8f5;
-      border: 1px solid #ddd0c8;
-      transition: transform 0.2s, background-color 0.3s;
+      background-color: var(--cafe-card);
+      border: 1px solid var(--cafe-borda);
+      border-radius: 10px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
     .card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(110,58,44,0.15); }
-    .card-header.bg-dark { background-color: #6E3A2C !important; }
+    .card-header.bg-dark { background-color: var(--cafe-escuro) !important; border-radius: 10px 10px 0 0 !important; }
+    .card-img-top { border-radius: 10px 10px 0 0; }
+    .card-footer { border-radius: 0 0 10px 10px !important; background-color: rgba(110,58,44,0.04); border-top: 1px solid var(--cafe-borda); }
 
     /* ── Buttons ── */
-    .btn-dark { background-color: #6E3A2C; border-color: #6E3A2C; color: #fff; }
-    .btn-dark:hover { background-color: #954534; border-color: #954534; }
-    .btn-warning { background-color: #996851; border-color: #996851; color: #fff; }
-    .btn-warning:hover { background-color: #954534; border-color: #954534; color: #fff; }
-    .btn-outline-dark { color: #6E3A2C; border-color: #6E3A2C; }
-    .btn-outline-dark:hover { background-color: #6E3A2C; color: #fff; }
-    .btn-outline-warning { color: #996851; border-color: #996851; }
-    .btn-outline-warning:hover { background-color: #996851; color: #fff; }
-    .btn-secondary { background-color: #8e8079; border-color: #8e8079; color: #fff; }
-    .btn-secondary:hover { background-color: #A69A97; border-color: #A69A97; }
-
+    .btn-dark { background-color: var(--cafe-escuro); border-color: var(--cafe-escuro); color: #fff; }
+    .btn-dark:hover { background-color: var(--cafe-medio); border-color: var(--cafe-medio); }
+    .btn-warning { background-color: var(--cafe-quente); border-color: var(--cafe-quente); color: #fff; }
+    .btn-warning:hover { background-color: var(--cafe-medio); border-color: var(--cafe-medio); color: #fff; }
+    .btn-primary { background-color: var(--cafe-medio); border-color: var(--cafe-medio); color: #fff; }
+    .btn-primary:hover { background-color: var(--cafe-escuro); border-color: var(--cafe-escuro); color: #fff; }
+    .btn-danger { background-color: #a03c2e; border-color: #a03c2e; color: #fff; }
+    .btn-danger:hover { background-color: #7d2e22; border-color: #7d2e22; color: #fff; }
+    .btn-outline-dark { color: var(--cafe-escuro); border-color: var(--cafe-escuro); }
+    .btn-outline-dark:hover { background-color: var(--cafe-escuro); color: #fff; }
+    .btn-outline-warning { color: var(--cafe-quente); border-color: var(--cafe-quente); }
+    .btn-outline-warning:hover { background-color: var(--cafe-quente); color: #fff; }
+    .btn-outline-primary { color: var(--cafe-medio); border-color: var(--cafe-medio); }
+    .btn-outline-primary:hover { background-color: var(--cafe-medio); color: #fff; }
+    .btn-outline-danger { color: #a03c2e; border-color: #a03c2e; }
+    .btn-outline-danger:hover { background-color: #a03c2e; color: #fff; }
+    .btn-outline-light { color: var(--cafe-creme); border-color: var(--cafe-creme); }
+    .btn-outline-light:hover { background-color: var(--cafe-creme); color: var(--cafe-escuro); }
+    .btn-secondary { background-color: var(--cafe-claro); border-color: var(--cafe-claro); color: #fff; }
+    .btn-secondary:hover { background-color: var(--cafe-bege); border-color: var(--cafe-bege); }
 
     /* ── Badges ── */
-    .badge.bg-warning { background-color: #996851 !important; color: #fff !important; }
-    .badge.bg-secondary { background-color: #8e8079 !important; }
-    .badge.bg-info { background-color: #A69A97 !important; color: #3a2318 !important; }
-    .badge.bg-dark { background-color: #6E3A2C !important; }
+    .badge.bg-warning { background-color: var(--cafe-quente) !important; color: #fff !important; }
+    .badge.bg-secondary { background-color: var(--cafe-claro) !important; }
+    .badge.bg-info { background-color: var(--cafe-bege) !important; color: #3a2318 !important; }
+    .badge.bg-dark { background-color: var(--cafe-escuro) !important; }
 
     /* ── Tables ── */
-    thead.table-dark th { background-color: #6E3A2C; color: #f5ede8; border-color: #954534; }
-    .table-striped > tbody > tr:nth-of-type(odd) > * { background-color: #f0e6e0; color: #2a1a14; }
-    .table-hover > tbody > tr:hover > * { background-color: #e8d8cf; color: #2a1a14; }
-
+    thead.table-dark th { background-color: var(--cafe-escuro); color: var(--cafe-creme); border-color: var(--cafe-medio); }
+    .table-striped > tbody > tr:nth-of-type(odd) > * { background-color: #f0e6e0; color: var(--cafe-texto); }
+    .table-hover > tbody > tr:hover > * { background-color: #e8d8cf; color: var(--cafe-texto); }
 
     /* ── Progress ── */
-    .progress { background-color: #ddd0c8; }
-    .progress-bar.bg-warning { background-color: #996851 !important; }
+    .progress { background-color: var(--cafe-borda); }
+    .progress-bar.bg-warning { background-color: var(--cafe-quente) !important; }
 
     /* ── Alerts ── */
-    .alert-info { background-color: #ede0d8; border-color: #A69A97; color: #6E3A2C; }
+    .alert-info { background-color: #ede0d8; border-color: var(--cafe-bege); color: var(--cafe-escuro); }
+    .alert-danger { background-color: #f0dcd8; border-color: #c9a09a; color: #5a1a12; }
 
     /* ── Headings ── */
-    h1, h2, h3 { color: #6E3A2C; }
-    .text-warning { color: #996851 !important; }
+    h1, h2, h3 { color: var(--cafe-escuro); }
+    /* Garante texto visível em fundos escuros */
+    .card-header.bg-dark h1,
+    .card-header.bg-dark h2,
+    .card-header.bg-dark h3,
+    .card-header.bg-dark h4,
+    .card-header.bg-dark h5,
+    .card-header.bg-dark h6,
+    .card-header.bg-dark i,
+    .card-header.bg-dark a { color: #fff !important; }
+    .text-warning { color: var(--cafe-quente) !important; }
     .text-muted { color: #7a6a64 !important; }
+    .text-info { color: var(--cafe-quente) !important; }
+
+    /* ── Lists ── */
+    .list-group-item {
+      background-color: var(--cafe-card);
+      border-color: var(--cafe-borda);
+      color: var(--cafe-texto);
+    }
 
     /* ── Forms ── */
     .form-control, .form-select {
-      background-color: #fdf8f5;
-      color: #2a1a14;
-      border-color: #ddd0c8;
+      background-color: var(--cafe-card);
+      color: var(--cafe-texto);
+      border-color: var(--cafe-borda);
     }
     .form-control:focus, .form-select:focus {
-      background-color: #fdf8f5;
-      color: #2a1a14;
-      border-color: #996851;
+      background-color: var(--cafe-card);
+      color: var(--cafe-texto);
+      border-color: var(--cafe-quente);
       box-shadow: 0 0 0 0.2rem rgba(153,104,81,0.25);
     }
-    .input-group-text { background-color: #3b2535; border-color: #ddd0c8; color: #e8ddd8; }
-    .form-range::-webkit-slider-thumb { background: #996851; }
+    .input-group-text { background-color: var(--cafe-sidebar); border-color: var(--cafe-borda); color: #e8ddd8; }
+    .form-range::-webkit-slider-thumb { background: var(--cafe-quente); }
+    .form-check-input:checked {
+      background-color: var(--cafe-quente);
+      border-color: var(--cafe-quente);
+    }
+    .form-text { color: var(--cafe-claro); }
 
     /* ── Mobile ── */
     @media (max-width: 768px) {
@@ -327,22 +365,25 @@
         <a class="sidebar-link" href="/categorias"><i class="bi bi-tags"></i> Categorias</a>
         <a class="sidebar-link" href="/habilidades"><i class="bi bi-lightning"></i> Habilidades</a>
       {{/if}}
-</aside>
+    </aside>
 
     <!-- ── Conteúdo ── -->
     <div class="main-content">
       <main>
         {{{body}}}
       </main>
-      <footer class="mt-4">
-        <p class="mb-0">&copy; 2026 - Portfólio de Receitas Culinárias | UTFPR - Programação Web Back-End</p>
-      </footer>
     </div>
 
   </div><!-- /app-body -->
 
+  <!-- Footer full-width -->
+  <footer class="site-footer">
+    <p class="mb-0">&copy; 2026 - Portfólio de Receitas Culinárias | UTFPR - Programação Web Back-End</p>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>    // ── Sidebar mobile ──
+  <script>
+    // ── Sidebar mobile ──
     const sidebar         = document.getElementById('sidebar');
     const sidebarToggle   = document.getElementById('sidebarToggle');
     const sidebarBackdrop = document.getElementById('sidebarBackdrop');

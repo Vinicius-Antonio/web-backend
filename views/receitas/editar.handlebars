@@ -5,7 +5,7 @@
         <h3 class="mb-0"><i class="bi bi-pencil"></i> Editar Receita</h3>
       </div>
       <div class="card-body">
-        <form action="/receitas/editar/{{receita.id}}" method="POST">
+        <form action="/receitas/editar/{{receita.id}}" method="POST" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="nome" class="form-label">Nome da Receita *</label>
             <input type="text" class="form-control" id="nome" name="nome"
@@ -22,6 +22,37 @@
             <label for="link_externo" class="form-label">Link Externo</label>
             <input type="url" class="form-control" id="link_externo" name="link_externo"
                    value="{{receita.link_externo}}">
+          </div>
+
+          <!-- Imagem atual -->
+          {{#if receita.imagem}}
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-image"></i> Imagem Atual</label>
+              <div class="d-flex align-items-start gap-3">
+                <img src="/uploads/{{receita.imagem}}" alt="Imagem da receita"
+                     class="img-fluid rounded" style="max-height: 180px; border: 2px solid #ddd0c8;">
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="remover_imagem" name="remover_imagem" value="1">
+                  <label class="form-check-label text-danger" for="remover_imagem">
+                    <i class="bi bi-trash"></i> Remover imagem
+                  </label>
+                </div>
+              </div>
+            </div>
+          {{/if}}
+
+          <!-- Upload de nova imagem -->
+          <div class="mb-3">
+            <label for="imagem" class="form-label">
+              <i class="bi bi-image"></i> {{#if receita.imagem}}Substituir Imagem{{else}}Imagem da Receita{{/if}}
+            </label>
+            <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
+            <div class="form-text">Formatos: JPG, PNG, GIF, WEBP. Máximo 5MB.</div>
+          </div>
+
+          <!-- Preview da nova imagem -->
+          <div class="mb-3" id="previewContainer" style="display:none;">
+            <img id="previewImg" src="" alt="Preview" class="img-fluid rounded" style="max-height: 200px; border: 2px solid #ddd0c8;">
           </div>
 
           <div class="mb-3">
@@ -63,3 +94,20 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById('imagem').addEventListener('change', function(e) {
+    const container = document.getElementById('previewContainer');
+    const img = document.getElementById('previewImg');
+    if (this.files && this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        img.src = ev.target.result;
+        container.style.display = 'block';
+      };
+      reader.readAsDataURL(this.files[0]);
+    } else {
+      container.style.display = 'none';
+    }
+  });
+</script>

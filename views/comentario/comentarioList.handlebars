@@ -29,8 +29,11 @@
               <h5 class="card-title mb-1" style="color:#6E3A2C;">
                 <i class="bi bi-chat-quote"></i> {{this.titulo}}
               </h5>
-              <small class="text-muted">
-                <i class="bi bi-person-circle"></i> {{this.autor}}
+              <small class="text-muted text-end">
+                <div><i class="bi bi-person-circle"></i> {{this.autor}}</div>
+                <div style="font-size: 0.8rem; margin-top: 2px;">
+                  <i class="bi bi-clock"></i> <span class="data-comentario">{{this.createdAt}}</span>
+                </div>
               </small>
             </div>
             <p class="card-text mt-2">{{this.texto}}</p>
@@ -45,3 +48,17 @@
     {{/if}}
   </div>
 </div>
+
+<!-- Script essencial para formatar a data do comentário -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.data-comentario').forEach(el => {
+      if (el.textContent) {
+        const d = new Date(el.textContent);
+        if (!isNaN(d)) {
+          el.textContent = d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+        }
+      }
+    });
+  });
+</script>

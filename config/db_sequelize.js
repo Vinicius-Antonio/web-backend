@@ -68,6 +68,10 @@ const Receita = sequelize.define(
       type: DataTypes.STRING(500),
       allowNull: true,
     },
+    imagem: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
   },
   {
     tableName: "receitas",
