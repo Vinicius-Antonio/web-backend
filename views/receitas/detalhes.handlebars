@@ -58,13 +58,25 @@
       </div>
 
       {{#if logado}}
-        <div class="card-footer">
+        <div class="card-footer d-flex gap-2 flex-wrap">
           <a href="/receitas/editar/{{receita.id}}" class="btn btn-primary btn-sm">
             <i class="bi bi-pencil"></i> Editar
           </a>
           <a href="/receitas/excluir/{{receita.id}}" class="btn btn-danger btn-sm"
              onclick="return confirm('Tem certeza que deseja excluir esta receita?')">
             <i class="bi bi-trash"></i> Excluir
+          </a>
+          <a href="/comentarioList/{{receita.id}}" class="btn btn-outline-dark btn-sm">
+            <i class="bi bi-chat-left-text"></i> Ver Comentários
+          </a>
+          <a href="/comentarioCreate/{{receita.id}}" class="btn btn-warning btn-sm">
+            <i class="bi bi-plus-circle"></i> Comentar
+          </a>
+        </div>
+      {{else}}
+        <div class="card-footer">
+          <a href="/comentarioList/{{receita.id}}" class="btn btn-outline-dark btn-sm">
+            <i class="bi bi-chat-left-text"></i> Ver Comentários
           </a>
         </div>
       {{/if}}

@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2><i class="bi bi-chat-left-text" style="color:#996851;"></i> Comentários</h2>
+      <div class="d-flex gap-2">
+        <a href="/comentarioCreate/{{receitaId}}" class="btn btn-warning btn-sm">
+          <i class="bi bi-plus-circle"></i> Novo Comentário
+        </a>
+        <a href="/receitas/detalhes/{{receitaId}}" class="btn btn-secondary btn-sm">
+          <i class="bi bi-arrow-left"></i> Voltar à Receita
+        </a>
+      </div>
+    </div>
+
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <h5 class="mb-0">
+          <i class="bi bi-journal-richtext" style="color:#996851;"></i>
+          {{receita.nome}}
+        </h5>
+      </div>
+    </div>
+
+    {{#if comentarios.length}}
+      {{#each comentarios}}
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <h5 class="card-title mb-1" style="color:#6E3A2C;">
+                <i class="bi bi-chat-quote"></i> {{this.titulo}}
+              </h5>
+              <small class="text-muted">
+                <i class="bi bi-person-circle"></i> {{this.autor}}
+              </small>
+            </div>
+            <p class="card-text mt-2">{{this.texto}}</p>
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> Nenhum comentário para esta receita.
+        <a href="/comentarioCreate/{{receitaId}}" class="alert-link">Seja o primeiro a comentar!</a>
+      </div>
+    {{/if}}
+  </div>
+</div>

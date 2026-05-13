@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+require("../config/db_mongoose");
 
 const {
   configurarLocals,
@@ -11,6 +12,7 @@ const controllerAluno = require("../controllers/controllerAluno");
 const controllerReceita = require("../controllers/controllerReceita");
 const controllerCategoria = require("../controllers/controllerCategoria");
 const controllerHabilidade = require("../controllers/controllerHabilidade");
+const controllerComentario = require("../controllers/controllerComentario");
 
 router.use(configurarLocals);
 
@@ -126,5 +128,9 @@ router.get(
   verificarAdmin,
   controllerHabilidade.excluir
 );
+
+router.get("/comentarioCreate/:id_receita", controllerComentario.getCreate);
+router.post("/comentarioCreate", controllerComentario.postCreate);
+router.get("/comentarioList/:id_receita", controllerComentario.getList);
 
 module.exports = router;
