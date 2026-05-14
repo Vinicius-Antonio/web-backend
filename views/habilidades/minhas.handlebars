@@ -8,53 +8,51 @@
         <p class="text-muted">Defina o nível (0 a 10) para cada habilidade. Nível 0 = não vinculada.</p>
 
         {{#if erro}}
-          <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> {{erro}}</div>
+        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> {{erro}}</div>
         {{/if}}
 
         {{#if habilidades.length}}
-          <form action="/habilidades/minhas" method="POST">
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead class="table-light">
-                  <tr>
-                    <th>Habilidade</th>
-                    <th style="width: 200px;">Nível (0-10)</th>
-                    <th style="width: 100px;">Barra</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {{#each habilidades}}
-                    <tr>
-                      <td><strong>{{this.nome}}</strong></td>
-                      <td>
-                        <input type="range" class="form-range" name="nivel_{{this.id}}"
-                               min="0" max="10" value="{{this.nivel}}"
-                               id="range_{{this.id}}"
-                               oninput="document.getElementById('val_{{this.id}}').textContent = this.value">
-                        <span class="badge bg-dark" id="val_{{this.id}}">{{this.nivel}}</span>
-                      </td>
-                      <td>
-                        <div class="progress" style="height: 20px;">
-                          <div class="progress-bar bg-warning" role="progressbar"
-                               style="width: {{this.nivel}}0%"
-                               aria-valuenow="{{this.nivel}}" aria-valuemin="0" aria-valuemax="10">
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  {{/each}}
-                </tbody>
-              </table>
-            </div>
-
-            <button type="submit" class="btn btn-warning">
-              <i class="bi bi-check-lg"></i> Salvar Habilidades
-            </button>
-          </form>
-        {{else}}
-          <div class="alert alert-info">
-            <i class="bi bi-info-circle"></i> Nenhuma habilidade cadastrada pelo administrador ainda.
+        <form action="/habilidades/minhas" method="POST">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Habilidade</th>
+                  <th style="width: 200px;">Nível (0-10)</th>
+                  <th style="width: 100px;">Barra</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each habilidades}}
+                <tr>
+                  <td><strong>{{this.nome}}</strong></td>
+                  <td>
+                    <input type="range" class="form-range" name="nivel_{{this.id}}" min="0" max="10"
+                      value="{{this.nivel}}" id="range_{{this.id}}"
+                      oninput="document.getElementById('val_{{this.id}}').textContent = this.value">
+                    <span class="badge bg-dark" id="val_{{this.id}}">{{this.nivel}}</span>
+                  </td>
+                  <td>
+                    <div class="progress" style="height: 20px;">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: {{this.nivel}}0%"
+                        aria-valuenow="{{this.nivel}}" aria-valuemin="0" aria-valuemax="10">
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
           </div>
+
+          <button type="submit" class="btn btn-warning">
+            <i class="bi bi-check-lg"></i> Salvar Habilidades
+          </button>
+        </form>
+        {{else}}
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle"></i> Nenhuma habilidade cadastrada pelo administrador ainda.
+        </div>
         {{/if}}
       </div>
     </div>

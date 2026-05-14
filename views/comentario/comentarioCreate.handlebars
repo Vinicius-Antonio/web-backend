@@ -1,45 +1,102 @@
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card shadow">
-      <div class="card-header bg-dark text-white">
-        <h3 class="mb-0"><i class="bi bi-chat-left-text"></i> Novo Comentário</h3>
-      </div>
-      <div class="card-body">
-        <p class="text-muted mb-3">
-          Receita: <strong>{{receitaNome}}</strong>
-        </p>
+<style>
+  .form-comentario-header {
+    background: linear-gradient(135deg, #6E3A2C 0%, #954534 60%, #996851 100%);
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1.2rem 1.5rem;
+  }
+  .form-comentario-header h3 {
+    color: #f5ede8 !important;
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  .form-comentario-header .receita-nome {
+    color: rgba(245,237,232,0.85);
+    font-size: 0.88rem;
+    margin-top: 0.3rem;
+  }
+  .comentario-form-card {
+    border: none;
+    box-shadow: 0 4px 24px rgba(110,58,44,0.12);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .comentario-form-card .card-body {
+    padding: 1.5rem;
+  }
+  .comentario-form-card .form-label {
+    font-weight: 600;
+    color: #6E3A2C;
+    font-size: 0.9rem;
+  }
+  .comentario-form-card textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  .char-count {
+    font-size: 0.78rem;
+    color: #8e8079;
+    text-align: right;
+    margin-top: 0.25rem;
+  }
+</style>
 
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-7">
+    <div class="card comentario-form-card">
+
+      <div class="form-comentario-header">
+        <h3><i class="bi bi-chat-left-text"></i> Novo Comentário</h3>
+        <div class="receita-nome">
+          <i class="bi bi-journal-richtext"></i> {{receitaNome}}
+        </div>
+      </div>
+
+      <div class="card-body">
         <form action="/comentarioCreate" method="POST">
           <input type="hidden" name="receitaId" value="{{receitaId}}">
 
           <div class="mb-3">
-            <label for="autor" class="form-label">Autor *</label>
+            <label for="autor" class="form-label">
+              <i class="bi bi-person-fill" style="color:#996851;"></i> Autor
+            </label>
             <input type="text" class="form-control" id="autor" name="autor"
                    value="{{autor}}" required placeholder="Seu nome" {{#if autor}}readonly{{/if}}>
+            {{#if autor}}
+              <div class="form-text"><i class="bi bi-lock"></i> Identificado automaticamente pela sessão</div>
+            {{/if}}
           </div>
 
           <div class="mb-3">
-            <label for="titulo" class="form-label">Título *</label>
-            <input type="text" class="form-control" id="titulo" name="titulo"
-                   required placeholder="Título do comentário">
-          </div>
-
-          <div class="mb-3">
-            <label for="texto" class="form-label">Comentário *</label>
+            <label for="texto" class="form-label">
+              <i class="bi bi-text-paragraph" style="color:#996851;"></i> Comentário
+            </label>
             <textarea class="form-control" id="texto" name="texto" rows="4"
-                      required placeholder="Escreva seu comentário..."></textarea>
+                      required placeholder="Compartilhe sua opinião sobre esta receita..." maxlength="1000"></textarea>
+            <div class="char-count" id="charCount">0 / 1000</div>
           </div>
 
-          <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-warning">
-              <i class="bi bi-check-lg"></i> Enviar Comentário
-            </button>
-            <a href="/comentarioList/{{receitaId}}" class="btn btn-secondary">
-              <i class="bi bi-arrow-left"></i> Cancelar
+          <div class="d-flex gap-2 justify-content-between">
+            <a href="/comentarioList/{{receitaId}}" class="btn btn-outline-dark">
+              <i class="bi bi-arrow-left"></i> Voltar
             </a>
+            <button type="submit" class="btn btn-warning">
+              <i class="bi bi-send"></i> Enviar Comentário
+            </button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var textarea = document.getElementById('texto');
+    var charCount = document.getElementById('charCount');
+    if (textarea && charCount) {
+      textarea.addEventListener('input', function() {
+        charCount.textContent = textarea.value.length + ' / 1000';
+      });
+    }
+  });
+</script>

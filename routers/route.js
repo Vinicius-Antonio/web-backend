@@ -135,5 +135,10 @@ router.get(
 router.get("/comentarioCreate/:id_receita", controllerComentario.getCreate);
 router.post("/comentarioCreate", controllerComentario.postCreate);
 router.get("/comentarioList/:id_receita", controllerComentario.getList);
+router.get(
+  "/comentario/excluir/:id",
+  verificarAutenticacao,
+  controllerComentario.excluir
+);
 
 module.exports = router;

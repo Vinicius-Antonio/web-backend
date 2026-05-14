@@ -1,4 +1,5 @@
-const { Receita, Categoria, Aluno } = require("../config/db_sequelize");
+const { Receita, Categoria, Aluno, Sequelize } = require("../config/db_sequelize");
+const { Op } = Sequelize;
 const fs = require("fs");
 const path = require("path");
 
@@ -23,23 +24,37 @@ const controllerReceita = {
 
   filtrarPorCategoria: async (req, res) => {
     try {
-      const { categoria_id } = req.query;
+      const { categoria_id, busca } = req.query;
       const categorias = await Categoria.findAll({ order: [["nome", "ASC"]], raw: true });
+
+      // Monta condição WHERE dinamicamente
+      const where = {};
+      if (busca && busca.trim() !== "") {
+        where.nome = { [Op.iLike]: `%${busca.trim()}%` };
+      }
+
       let receitas;
 
       if (categoria_id && categoria_id !== "") {
+        // Filtra por categoria (e opcionalmente por nome)
         const categoria = await Categoria.findByPk(categoria_id, {
           include: [{
             model: Receita, as: "receitas",
+            where: Object.keys(where).length > 0 ? where : undefined,
+            required: Object.keys(where).length > 0,
             include: [
               { model: Categoria, as: "categorias" },
               { model: Aluno, as: "responsaveis", attributes: ["id", "login"] },
             ],
           }],
         });
-        receitas = categoria ? categoria.receitas.map((r) => r.get({ plain: true })) : [];
+        receitas = categoria && categoria.receitas
+          ? categoria.receitas.map((r) => r.get({ plain: true }))
+          : [];
       } else {
+        // Busca por nome (sem filtro de categoria)
         const todas = await Receita.findAll({
+          where,
           include: [
             { model: Categoria, as: "categorias" },
             { model: Aluno, as: "responsaveis", attributes: ["id", "login"] },
@@ -49,8 +64,14 @@ const controllerReceita = {
         receitas = todas.map((r) => r.get({ plain: true }));
       }
 
+      const filtroAtivo = !!(categoria_id || (busca && busca.trim()));
       const categoriasComSelecao = categorias.map((c) => ({ ...c, selected: c.id == categoria_id }));
-      res.render("home", { receitas, categorias: categoriasComSelecao, filtroAtivo: !!categoria_id });
+      res.render("home", {
+        receitas,
+        categorias: categoriasComSelecao,
+        filtroAtivo,
+        busca: busca || "",
+      });
     } catch (error) {
       console.error("Erro ao filtrar receitas:", error);
       res.redirect("/");
@@ -59,6 +80,8 @@ const controllerReceita = {
 
   detalhes: async (req, res) => {
     try {
+      const Comentario = require("../models/noSql/comentario");
+
       const receita = await Receita.findByPk(req.params.id, {
         include: [
           { model: Categoria, as: "categorias" },
@@ -66,7 +89,14 @@ const controllerReceita = {
         ],
       });
       if (!receita) return res.redirect("/");
-      res.render("receitas/detalhes", { receita: receita.get({ plain: true }) });
+
+      // Busca a contagem de comentários no MongoDB
+      const totalComentarios = await Comentario.countDocuments({ receitaId: receita.id });
+
+      res.render("receitas/detalhes", {
+        receita: receita.get({ plain: true }),
+        totalComentarios,
+      });
     } catch (error) {
       console.error("Erro ao carregar detalhes:", error);
       res.redirect("/");

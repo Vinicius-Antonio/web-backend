@@ -76,7 +76,10 @@
             <i class="bi bi-trash"></i> Excluir
           </a>
           <a href="/comentarioList/{{receita.id}}" class="btn btn-outline-dark btn-sm">
-            <i class="bi bi-chat-left-text"></i> Ver Comentários
+            <i class="bi bi-chat-left-text"></i> Comentários
+            {{#if totalComentarios}}
+              <span class="badge bg-dark ms-1">{{totalComentarios}}</span>
+            {{/if}}
           </a>
           <a href="/comentarioCreate/{{receita.id}}" class="btn btn-warning btn-sm">
             <i class="bi bi-plus-circle"></i> Comentar
@@ -85,7 +88,13 @@
       {{else}}
         <div class="card-footer">
           <a href="/comentarioList/{{receita.id}}" class="btn btn-outline-dark btn-sm">
-            <i class="bi bi-chat-left-text"></i> Ver Comentários
+            <i class="bi bi-chat-left-text"></i> Comentários
+            {{#if totalComentarios}}
+              <span class="badge bg-dark ms-1">{{totalComentarios}}</span>
+            {{/if}}
+          </a>
+          <a href="/comentarioCreate/{{receita.id}}" class="btn btn-warning btn-sm">
+            <i class="bi bi-plus-circle"></i> Comentar
           </a>
         </div>
       {{/if}}

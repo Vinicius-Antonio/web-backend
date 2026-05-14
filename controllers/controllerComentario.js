@@ -20,10 +20,9 @@ const controllerComentario = {
 
   postCreate: async (req, res) => {
     try {
-      const { titulo, texto, autor, receitaId } = req.body;
+      const { texto, autor, receitaId } = req.body;
 
       const comentario = new Comentario({
-        titulo,
         texto,
         autor,
         receitaId: parseInt(receitaId),
@@ -43,16 +42,41 @@ const controllerComentario = {
       const receita = await Receita.findByPk(receitaId, { raw: true });
       if (!receita) return res.redirect("/");
 
-      const comentarios = await Comentario.find({ receitaId: receitaId });
-      const comentariosJSON = comentarios.map((coment) => coment.toJSON());
+      const comentarios = await Comentario.find({ receitaId: receitaId }).sort({ createdAt: -1 });
+      const comentariosJSON = comentarios.map((coment) => {
+        const obj = coment.toJSON();
+        // Gera as iniciais do autor para o avatar
+        obj.autorInicial = obj.autor
+          ? obj.autor.charAt(0).toUpperCase()
+          : "?";
+        return obj;
+      });
+
+      // Permite excluir se o usuário está logado (admin ou autor do comentário)
+      const podeExcluir = req.session.logado || false;
 
       res.render("comentario/comentarioList", {
         comentarios: comentariosJSON,
         receita,
         receitaId,
+        podeExcluir,
       });
     } catch (error) {
       console.error("Erro ao listar comentários:", error);
+      res.redirect("/");
+    }
+  },
+
+  excluir: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { receitaId } = req.query;
+
+      await Comentario.findByIdAndDelete(id);
+
+      res.redirect(`/comentarioList/${receitaId || ""}`);
+    } catch (error) {
+      console.error("Erro ao excluir comentário:", error);
       res.redirect("/");
     }
   },

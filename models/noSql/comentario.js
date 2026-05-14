@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 const comentarioSchema = new mongoose.Schema(
   {
-    titulo: {
-      type: String,
-      required: true,
-    },
     texto: {
       type: String,
       required: true,

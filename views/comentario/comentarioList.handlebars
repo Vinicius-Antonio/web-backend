@@ -1,61 +1,183 @@
+<style>
+  .comentarios-header {
+    background: linear-gradient(135deg, #6E3A2C 0%, #954534 60%, #996851 100%);
+    border-radius: 12px 12px 0 0;
+    padding: 1.2rem 1.5rem;
+    color: #f5ede8;
+  }
+  .comentarios-header h2 {
+    color: #f5ede8 !important;
+    margin: 0;
+    font-size: 1.3rem;
+  }
+  .comentarios-header .receita-nome {
+    opacity: 0.85;
+    font-size: 0.88rem;
+    margin-top: 0.3rem;
+  }
+  .comentario-card {
+    background: var(--cafe-card, #fdf8f5);
+    border: 1px solid var(--cafe-borda, #ddd0c8);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+    transition: box-shadow 0.2s, transform 0.15s;
+    position: relative;
+  }
+  .comentario-card:hover {
+    box-shadow: 0 4px 16px rgba(110,58,44,0.12);
+    transform: translateY(-1px);
+  }
+  .comentario-avatar {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #954534, #996851);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .comentario-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .comentario-autor {
+    font-weight: 600;
+    color: #6E3A2C;
+    font-size: 0.95rem;
+  }
+  .comentario-data {
+    font-size: 0.78rem;
+    color: #8e8079;
+  }
+
+  .comentario-texto {
+    color: #5a4a44;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .comentario-actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+  .comentarios-count {
+    background: rgba(255,255,255,0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .comentarios-empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: #8e8079;
+  }
+  .comentarios-empty i {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #A69A97;
+  }
+  .comentario-divider {
+    border: none;
+    border-top: 1px solid #ede0d8;
+    margin: 0.4rem 0;
+  }
+</style>
+
 <div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2><i class="bi bi-chat-left-text" style="color:#996851;"></i> Comentários</h2>
-      <div class="d-flex gap-2">
+  <div class="col-md-9 col-lg-8">
+
+    <div class="comentarios-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h2><i class="bi bi-chat-left-text"></i> Comentários</h2>
+          <div class="receita-nome">
+            <i class="bi bi-journal-richtext"></i> {{receita.nome}}
+          </div>
+        </div>
+        <span class="comentarios-count">
+          {{comentarios.length}}
+        </span>
+      </div>
+    </div>
+
+    {{!-- Barra de ações --}}
+    <div class="card" style="border-radius: 0 0 12px 12px; border-top: none; margin-bottom: 1.5rem;">
+      <div class="card-body d-flex justify-content-between align-items-center py-2">
         <a href="/comentarioCreate/{{receitaId}}" class="btn btn-warning btn-sm">
           <i class="bi bi-plus-circle"></i> Novo Comentário
         </a>
-        <a href="/receitas/detalhes/{{receitaId}}" class="btn btn-secondary btn-sm">
+        <a href="/receitas/detalhes/{{receitaId}}" class="btn btn-outline-dark btn-sm">
           <i class="bi bi-arrow-left"></i> Voltar à Receita
         </a>
       </div>
     </div>
 
-    <div class="card shadow mb-4">
-      <div class="card-body">
-        <h5 class="mb-0">
-          <i class="bi bi-journal-richtext" style="color:#996851;"></i>
-          {{receita.nome}}
-        </h5>
-      </div>
-    </div>
-
+    {{!-- Lista de comentários --}}
     {{#if comentarios.length}}
       {{#each comentarios}}
-        <div class="card mb-3 shadow-sm">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="card-title mb-1" style="color:#6E3A2C;">
-                <i class="bi bi-chat-quote"></i> {{this.titulo}}
-              </h5>
-              <small class="text-muted text-end">
-                <div><i class="bi bi-person-circle"></i> {{this.autor}}</div>
-                <div style="font-size: 0.8rem; margin-top: 2px;">
-                  <i class="bi bi-clock"></i> <span class="data-comentario">{{this.createdAt}}</span>
-                </div>
-              </small>
+        <div class="comentario-card">
+          {{!-- Botão de excluir (só para autor logado ou admin) --}}
+          {{#if ../podeExcluir}}
+            <div class="comentario-actions">
+              <a href="/comentario/excluir/{{this._id}}?receitaId={{../receitaId}}"
+                 class="btn btn-outline-danger btn-sm"
+                 onclick="return confirm('Tem certeza que deseja excluir este comentário?')"
+                 title="Excluir comentário">
+                <i class="bi bi-trash"></i>
+              </a>
             </div>
-            <p class="card-text mt-2">{{this.texto}}</p>
+          {{/if}}
+
+          <div class="comentario-meta">
+            <div class="comentario-avatar">
+              {{this.autorInicial}}
+            </div>
+            <div>
+              <div class="comentario-autor">
+                <i class="bi bi-person-fill" style="color:#996851;"></i> {{this.autor}}
+              </div>
+              <div class="comentario-data">
+                <i class="bi bi-clock"></i> <span class="data-comentario">{{this.createdAt}}</span>
+              </div>
+            </div>
           </div>
+
+          <hr class="comentario-divider">
+
+          <p class="comentario-texto">{{this.texto}}</p>
         </div>
       {{/each}}
     {{else}}
-      <div class="alert alert-info">
-        <i class="bi bi-info-circle"></i> Nenhum comentário para esta receita.
-        <a href="/comentarioCreate/{{receitaId}}" class="alert-link">Seja o primeiro a comentar!</a>
+      <div class="comentarios-empty">
+        <i class="bi bi-chat-left-dots"></i>
+        <p style="font-size: 1.1rem; margin-bottom: 0.3rem;">Nenhum comentário ainda</p>
+        <p style="font-size: 0.88rem;">Seja o primeiro a compartilhar sua opinião sobre esta receita!</p>
+        <a href="/comentarioCreate/{{receitaId}}" class="btn btn-warning btn-sm mt-2">
+          <i class="bi bi-plus-circle"></i> Escrever Comentário
+        </a>
       </div>
     {{/if}}
+
   </div>
 </div>
 
-<!-- Script essencial para formatar a data do comentário -->
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.data-comentario').forEach(el => {
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.data-comentario').forEach(function(el) {
       if (el.textContent) {
-        const d = new Date(el.textContent);
-        if (!isNaN(d)) {
+        var d = new Date(el.textContent);
+        if (!isNaN(d.getTime())) {
           el.textContent = d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
         }
       }

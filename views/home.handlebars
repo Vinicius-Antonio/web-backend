@@ -45,13 +45,17 @@
     justify-content: center;
     font-size: 1.2rem;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
     flex-shrink: 0;
     padding: 0;
   }
   .slider-arrow:hover {
     background: rgba(149,69,52,0.8);
     border-color: #f5ede8;
+    transform: scale(1.1);
+  }
+  .slider-arrow:active {
+    transform: scale(0.95);
   }
   .carousel-wrap {
     flex: 1;
@@ -68,20 +72,22 @@
     transform: none;
     box-shadow: 0 4px 20px rgba(0,0,0,0.25);
   }
-  .carousel-indicators {
+  #receitasSlider .carousel-indicators {
     position: static;
     margin: 0.75rem 0 0;
     justify-content: center;
   }
-  .carousel-indicators [data-bs-target] {
+  #receitasSlider .carousel-indicators [data-bs-target] {
     background-color: rgba(166,154,151,0.6);
     width: 8px;
     height: 8px;
     border-radius: 50%;
     border: none;
+    transition: background-color 0.3s, transform 0.3s;
   }
-  .carousel-indicators .active {
+  #receitasSlider .carousel-indicators .active {
     background-color: #f5ede8;
+    transform: scale(1.3);
   }
   .slider-badge {
     background-color: #996851;
@@ -107,8 +113,9 @@
       <div id="receitasSlider" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
         <div class="carousel-inner" id="sliderInner">
         </div>
+        <!-- Indicators DENTRO do carousel para associação correta -->
+        <div class="carousel-indicators" id="sliderIndicators"></div>
       </div>
-      <div class="carousel-indicators" id="sliderIndicators"></div>
     </div>
 
     <button class="slider-arrow" id="btnNext" type="button" aria-label="Próximo">
@@ -118,8 +125,8 @@
 </div>
 
 <script>
-  (function () {
-    const todasReceitas = [
+  document.addEventListener('DOMContentLoaded', function () {
+    var todasReceitas = [
       {{#each receitas}}
       {
         id: {{this.id}},
@@ -132,17 +139,18 @@
       {{/each}}
     ];
 
-    const selecionadas = todasReceitas
-      .map(r => ({ r, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ r }) => r)
+    var selecionadas = todasReceitas
+      .map(function(r) { return { r: r, sort: Math.random() }; })
+      .sort(function(a, b) { return a.sort - b.sort; })
+      .map(function(item) { return item.r; })
       .slice(0, 6);
 
-    const inner      = document.getElementById('sliderInner');
-    const indicators = document.getElementById('sliderIndicators');
+    var inner      = document.getElementById('sliderInner');
+    var indicators = document.getElementById('sliderIndicators');
 
-    selecionadas.forEach((receita, i) => {
-      const ind = document.createElement('button');
+    selecionadas.forEach(function(receita, i) {
+      // Indicador
+      var ind = document.createElement('button');
       ind.setAttribute('type', 'button');
       ind.setAttribute('data-bs-target', '#receitasSlider');
       ind.setAttribute('data-bs-slide-to', String(i));
@@ -150,48 +158,51 @@
       if (i === 0) { ind.classList.add('active'); ind.setAttribute('aria-current', 'true'); }
       indicators.appendChild(ind);
 
-      const cats  = receita.categorias.map(c => `<span class="badge slider-badge me-1">${c}</span>`).join('');
-      const resps = receita.responsaveis.map(r => `<span class="badge slider-user-badge me-1"><i class="bi bi-person"></i> ${r}</span>`).join('');
-      const desc  = receita.descricao
-        ? `<p class="card-text text-muted mt-2 mb-2" style="font-size:.88rem;">${receita.descricao.substring(0,130)}${receita.descricao.length > 130 ? '…' : ''}</p>`
-        : `<p class="card-text text-muted mt-2 mb-2"><em style="font-size:.85rem;">Sem descrição</em></p>`;
+      // Card
+      var cats  = receita.categorias.map(function(c) { return '<span class="badge slider-badge me-1">' + c + '</span>'; }).join('');
+      var resps = receita.responsaveis.map(function(r) { return '<span class="badge slider-user-badge me-1"><i class="bi bi-person"></i> ' + r + '</span>'; }).join('');
+      var desc  = receita.descricao
+        ? '<p class="card-text text-muted mt-2 mb-2" style="font-size:.88rem;">' + receita.descricao.substring(0,130) + (receita.descricao.length > 130 ? '…' : '') + '</p>'
+        : '<p class="card-text text-muted mt-2 mb-2"><em style="font-size:.85rem;">Sem descrição</em></p>';
 
-      const imgHtml = receita.imagem
-        ? `<img src="/uploads/${receita.imagem}" alt="${receita.nome}" class="rounded me-3 flex-shrink-0" style="width:100px;height:100px;object-fit:cover;border:2px solid #ddd0c8;">`
+      var imgHtml = receita.imagem
+        ? '<img src="/uploads/' + receita.imagem + '" alt="' + receita.nome + '" class="rounded me-3 flex-shrink-0" style="width:100px;height:100px;object-fit:cover;border:2px solid #ddd0c8;">'
         : '';
 
-      const item = document.createElement('div');
+      var item = document.createElement('div');
       item.className = 'carousel-item' + (i === 0 ? ' active' : '');
-      item.innerHTML = `
-        <div class="card p-3 p-md-4">
-          <div class="d-flex">
-            ${imgHtml}
-            <div class="flex-grow-1">
-              <div class="d-flex justify-content-between align-items-start">
-                <h5 class="card-title mb-1" style="color:#6E3A2C;">
-                  <i class="bi bi-cup-hot" style="color:#996851;"></i> ${receita.nome}
-                </h5>
-                <a href="/receitas/detalhes/${receita.id}" class="btn btn-sm btn-outline-dark flex-shrink-0 ms-2">
-                  <i class="bi bi-eye"></i> Ver
-                </a>
-              </div>
-              ${desc}
-              <div class="mt-1">
-                ${cats  ? `<div class="mb-1">${cats}</div>`  : ''}
-                ${resps ? `<div>${resps}</div>` : ''}
-              </div>
-            </div>
-          </div>
-        </div>`;
+      item.innerHTML =
+        '<div class="card p-3 p-md-4">' +
+          '<div class="d-flex">' +
+            imgHtml +
+            '<div class="flex-grow-1">' +
+              '<div class="d-flex justify-content-between align-items-start">' +
+                '<h5 class="card-title mb-1" style="color:#6E3A2C;">' +
+                  '<i class="bi bi-cup-hot" style="color:#996851;"></i> ' + receita.nome +
+                '</h5>' +
+                '<a href="/receitas/detalhes/' + receita.id + '" class="btn btn-sm btn-outline-dark flex-shrink-0 ms-2">' +
+                  '<i class="bi bi-eye"></i> Ver' +
+                '</a>' +
+              '</div>' +
+              desc +
+              '<div class="mt-1">' +
+                (cats  ? '<div class="mb-1">' + cats + '</div>'  : '') +
+                (resps ? '<div>' + resps + '</div>' : '') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
       inner.appendChild(item);
     });
 
-    const carouselEl = document.getElementById('receitasSlider');
-    const carousel   = new bootstrap.Carousel(carouselEl, { ride: 'carousel', interval: 3500 });
+    // Inicializa o carousel Bootstrap
+    var carouselEl = document.getElementById('receitasSlider');
+    var carousel   = new bootstrap.Carousel(carouselEl, { ride: 'carousel', interval: 3500 });
 
-    document.getElementById('btnPrev').addEventListener('click', () => carousel.prev());
-    document.getElementById('btnNext').addEventListener('click', () => carousel.next());
-  })();
+    // Conecta as setas
+    document.getElementById('btnPrev').addEventListener('click', function() { carousel.prev(); });
+    document.getElementById('btnNext').addEventListener('click', function() { carousel.next(); });
+  });
 </script>
 {{/if}}
 
@@ -200,13 +211,21 @@
   <h1><i class="bi bi-journal-richtext" style="color:#996851;"></i> Receitas Culinárias</h1>
 </div>
 
-{{!-- Filtro por categoria --}}
+{{!-- Busca e Filtro --}}
 <div class="card mb-4">
   <div class="card-body">
     <form action="/receitas/filtrar" method="GET" class="row g-3 align-items-end">
-      <div class="col-md-8">
+      <div class="col-md-5">
+        <label for="busca" class="form-label">
+          <i class="bi bi-search"></i> Buscar Receita
+        </label>
+        <input type="text" class="form-control" id="busca" name="busca"
+               placeholder="Digite o nome da receita..."
+               value="{{busca}}" autocomplete="off">
+      </div>
+      <div class="col-md-4">
         <label for="categoria_id" class="form-label">
-          <i class="bi bi-funnel"></i> Filtrar por Categoria
+          <i class="bi bi-funnel"></i> Categoria
         </label>
         <select class="form-select" id="categoria_id" name="categoria_id">
           <option value="">Todas as categorias</option>
@@ -215,10 +234,15 @@
           {{/each}}
         </select>
       </div>
-      <div class="col-md-4">
-        <button type="submit" class="btn btn-dark w-100">
-          <i class="bi bi-search"></i> Filtrar
+      <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-dark flex-grow-1">
+          <i class="bi bi-search"></i> Buscar
         </button>
+        {{#if filtroAtivo}}
+          <a href="/" class="btn btn-outline-dark" title="Limpar filtros">
+            <i class="bi bi-x-lg"></i>
+          </a>
+        {{/if}}
       </div>
     </form>
   </div>
@@ -286,9 +310,14 @@
   </div>
 {{else}}
   <div class="alert alert-info">
-    <i class="bi bi-info-circle"></i> Nenhuma receita encontrada.
+    <i class="bi bi-info-circle"></i>
+    {{#if busca}}
+      Nenhuma receita encontrada para "<strong>{{busca}}</strong>".
+    {{else}}
+      Nenhuma receita encontrada.
+    {{/if}}
     {{#if filtroAtivo}}
-      <a href="/" class="alert-link">Limpar filtro</a>
+      <a href="/" class="alert-link">Limpar filtros</a>
     {{/if}}
   </div>
 {{/if}}
