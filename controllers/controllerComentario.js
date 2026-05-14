@@ -45,14 +45,12 @@ const controllerComentario = {
       const comentarios = await Comentario.find({ receitaId: receitaId }).sort({ createdAt: -1 });
       const comentariosJSON = comentarios.map((coment) => {
         const obj = coment.toJSON();
-        // Gera as iniciais do autor para o avatar
         obj.autorInicial = obj.autor
           ? obj.autor.charAt(0).toUpperCase()
           : "?";
         return obj;
       });
 
-      // Permite excluir se o usuário está logado (admin ou autor do comentário)
       const podeExcluir = req.session.logado || false;
 
       res.render("comentario/comentarioList", {

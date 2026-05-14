@@ -27,7 +27,6 @@ const controllerReceita = {
       const { categoria_id, busca } = req.query;
       const categorias = await Categoria.findAll({ order: [["nome", "ASC"]], raw: true });
 
-      // Monta condição WHERE dinamicamente
       const where = {};
       if (busca && busca.trim() !== "") {
         where.nome = { [Op.iLike]: `%${busca.trim()}%` };
@@ -36,7 +35,6 @@ const controllerReceita = {
       let receitas;
 
       if (categoria_id && categoria_id !== "") {
-        // Filtra por categoria (e opcionalmente por nome)
         const categoria = await Categoria.findByPk(categoria_id, {
           include: [{
             model: Receita, as: "receitas",
@@ -52,7 +50,6 @@ const controllerReceita = {
           ? categoria.receitas.map((r) => r.get({ plain: true }))
           : [];
       } else {
-        // Busca por nome (sem filtro de categoria)
         const todas = await Receita.findAll({
           where,
           include: [
@@ -90,7 +87,6 @@ const controllerReceita = {
       });
       if (!receita) return res.redirect("/");
 
-      // Busca a contagem de comentários no MongoDB
       const totalComentarios = await Comentario.countDocuments({ receitaId: receita.id });
 
       res.render("receitas/detalhes", {
@@ -129,12 +125,10 @@ const controllerReceita = {
 
   cadastrar: async (req, res) => {
     try {
-      const { nome, descricao, link_externo, categorias, responsaveis } = req.body;
-
-      // Pega o nome do arquivo se foi enviada uma imagem
+      const { nome, descricao, modo_preparo, link_externo, categorias, responsaveis } = req.body;
       const imagem = req.file ? req.file.filename : null;
 
-      const receita = await Receita.create({ nome, descricao, link_externo, imagem });
+      const receita = await Receita.create({ nome, descricao, modo_preparo, link_externo, imagem });
 
       if (categorias) {
         const catIds = Array.isArray(categorias) ? categorias : [categorias];
@@ -194,10 +188,9 @@ const controllerReceita = {
       const ehResponsavel = receita.responsaveis.some((r) => r.id === req.session.usuarioId);
       if (!ehResponsavel && req.session.tipo !== 2) return res.redirect("/receitas/minhas");
 
-      const { nome, descricao, link_externo, categorias, responsaveis, remover_imagem } = req.body;
-      const dadosUpdate = { nome, descricao, link_externo };
+      const { nome, descricao, modo_preparo, link_externo, categorias, responsaveis, remover_imagem } = req.body;
+      const dadosUpdate = { nome, descricao, modo_preparo, link_externo };
 
-      // Se enviou nova imagem, apaga a antiga e salva a nova
       if (req.file) {
         if (receita.imagem) {
           const caminhoAntigo = path.join(__dirname, "..", "public", "uploads", receita.imagem);
@@ -206,7 +199,6 @@ const controllerReceita = {
         dadosUpdate.imagem = req.file.filename;
       }
 
-      // Se marcou para remover imagem
       if (remover_imagem === "1" && !req.file) {
         if (receita.imagem) {
           const caminhoAntigo = path.join(__dirname, "..", "public", "uploads", receita.imagem);
@@ -245,7 +237,6 @@ const controllerReceita = {
       const ehResponsavel = receita.responsaveis.some((r) => r.id === req.session.usuarioId);
       if (!ehResponsavel && req.session.tipo !== 2) return res.redirect("/receitas/minhas");
 
-      // Remove a imagem do disco ao excluir a receita
       if (receita.imagem) {
         const caminhoImagem = path.join(__dirname, "..", "public", "uploads", receita.imagem);
         if (fs.existsSync(caminhoImagem)) fs.unlinkSync(caminhoImagem);

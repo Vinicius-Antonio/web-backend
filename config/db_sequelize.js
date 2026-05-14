@@ -72,6 +72,10 @@ const Receita = sequelize.define(
       type: DataTypes.STRING(255),
       allowNull: true,
     },
+    modo_preparo: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     tableName: "receitas",

@@ -74,8 +74,9 @@ db.sequelize
       );
     }
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Servidor rodando localmente em: http://localhost:${PORT}`);
+      console.log(`🌐 Para acessar de outro computador na rede, use: http://192.168.3.26:${PORT}`);
     });
   })
   .catch((err) => {

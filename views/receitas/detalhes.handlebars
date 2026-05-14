@@ -27,6 +27,16 @@
           {{/if}}
         </div>
 
+        <!-- Modo de Preparo -->
+        <div class="mb-4">
+          <h5><i class="bi bi-list-task"></i> Modo de Preparo</h5>
+          {{#if receita.modo_preparo}}
+            <div class="p-3 bg-light rounded" style="white-space: pre-wrap;">{{receita.modo_preparo}}</div>
+          {{else}}
+            <p class="text-muted"><em>Sem modo de preparo cadastrado.</em></p>
+          {{/if}}
+        </div>
+
         <!-- Link Externo -->
         {{#if receita.link_externo}}
           <div class="mb-4">
